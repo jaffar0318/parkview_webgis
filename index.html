@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Park View City Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #232526 0%, #414345 100%);
+      color: #f5f6fa;
+      min-height: 100vh;
+    }
+    header {
+      background: #232526;
+      padding: 30px 0 10px 0;
+      text-align: center;
+      font-size: 36px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      color: #00d2ff;
+      border-bottom: 3px solid #0f2027;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .banner {
+      width: 100%;
+      height: 320px;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      margin-bottom: 30px;
+    }
+    .banner::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20, 20, 30, 0.45);
+    }
+    .banner-text {
+      position: relative;
+      color: #fff;
+      font-size: 2.5rem;
+      font-weight: 700;
+      z-index: 1;
+      text-shadow: 0 2px 8px #000;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      background: #232526;
+      padding: 15px;
+      border-bottom: 2px solid #0f2027;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-btn {
+      background: #00d2ff;
+      color: #232526;
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+      border: none;
+      font-size: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .dropdown-btn:hover {
+      background: #3a7bd5;
+      color: #fff;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #232526;
+      min-width: 260px;
+      border-radius: 8px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+      z-index: 999;
+      padding: 16px;
+      color: #fff;
+      opacity: 0;
+      transform: scale(0.92);
+      pointer-events: none;
+      animation: none;
+    }
+    .dropdown:hover .dropdown-content,
+    .dropdown:focus-within .dropdown-content {
+      display: block;
+      opacity: 1;
+      pointer-events: auto;
+      animation: dropdown-pop 0.38s cubic-bezier(.4,1.4,.6,1) both;
+    }
+    @keyframes dropdown-pop {
+      0% { opacity: 0; transform: scale(0.92); }
+      60% { opacity: 1; transform: scale(1.04); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .dropdown-content h3 {
+      color: #00d2ff;
+      margin-bottom: 8px;
+    }
+    .dropdown-content p {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      padding: 40px 5vw;
+      gap: 30px;
+    }
+    .section {
+      background: rgba(36, 37, 42, 0.95);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.10);
+      margin-bottom: 20px;
+    }
+    .center-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+    .btn {
+      background: linear-gradient(90deg, #00d2ff 0%, #3a7bd5 100%);
+      color: #fff;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 10px;
+      font-size: 20px;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      transition: background 0.3s, transform 0.2s;
+    }
+    .btn:hover {
+      background: linear-gradient(90deg, #3a7bd5 0%, #00d2ff 100%);
+      transform: translateY(-2px) scale(1.04);
+    }
+    .gallery-section {
+      background: none;
+      box-shadow: none;
+      padding-bottom: 32px;
+      margin: 40px 5vw 0 5vw;
+    }
+    .gallery-title {
+      font-size: 1.7rem;
+      color: #00d2ff;
+      margin-bottom: 24px;
+      font-weight: 700;
+      text-align: center;
+      width: 100%;
+    }
+    .gallery-slider {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      background: rgba(36, 37, 42, 0.95);
+      border-radius: 16px;
+      box-shadow: 0 0 18px rgba(0,0,0,0.10);
+      padding: 0;
+      margin: 0 auto;
+      max-width: 900px;
+      min-width: 0;
+      overflow: hidden;
+      position: relative;
+      height: 210px;
+      transition: box-shadow 0.2s;
+    }
+    .gallery-multi {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+      justify-content: stretch;
+      width: 900px;
+      min-width: 0;
+      overflow: hidden;
+      height: 210px;
+    }
+    .gallery-multi .gallery-img {
+      width: 300px;
+      height: 210px;
+      object-fit: cover;
+      border-radius: 0;
+      box-shadow: none;
+      transition: transform 0.2s;
+      background: #18191c;
+      margin: 0;
+      display: block;
+    }
+    .slider-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(30,34,44,0.85);
+      color: #fff;
+      border: none;
+      font-size: 2.6rem;
+      border-radius: 50%;
+      width: 56px;
+      height: 56px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, background 0.2s, color 0.2s, box-shadow 0.2s;
+      z-index: 2;
+    }
+    .slider-arrow-left { left: 10px; }
+    .slider-arrow-right { right: 10px; }
+    .gallery-slider:hover .slider-arrow,
+    .gallery-slider:focus-within .slider-arrow {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .slider-arrow:hover {
+      background: #00d2ff;
+      color: #232526;
+      box-shadow: 0 6px 24px #00d2ff44;
+    }
+    .gallery-img {
+      width: 350px;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      transition: transform 0.2s;
+    }
+    @media (max-width: 600px) {
+      .gallery-img { width: 90vw; height: 160px; }
+      .gallery-slider { max-width: 98vw; }
+      .gallery-multi .gallery-img { width: 90vw; height: 120px; }
+    }
+    footer {
+      background: #232526;
+      padding: 18px;
+      text-align: center;
+      font-size: 15px;
+      color: #b2bec3;
+      border-top: 2px solid #0f2027;
+      margin-top: 40px;
+    }
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+        padding: 20px 2vw;
+      }
+      .gallery-section {
+        margin: 40px 2vw 0 2vw;
+      }
+    }
+    @media (max-width: 1000px) {
+      .gallery-multi .gallery-img { width: 32vw; height: 100px; }
+      .gallery-multi { width: 96vw; }
+      .gallery-slider { max-width: 99vw; height: 110px; }
+    }
+    .devs-flex {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      align-items: center;
+      justify-content: center;
+    }
+    .dev-block {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 0;
+      justify-content: flex-start;
+      width: 100%;
+    }
+    .dev-img-wrap {
+      width: 70px;
+      height: 70px;
+      min-width: 70px;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #18191c;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      border: 2.5px solid #00d2ff;
+      overflow: hidden;
+      margin-right: 8px;
+      opacity: 0;
+      transform: scale(0.85);
+      pointer-events: none;
+    }
+    .dev-img {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #232526;
+      border: none;
+      box-shadow: none;
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+      display: block;
+    }
+    .dev-img-wrap:hover .dev-img {
+      transform: scale(1.08);
+      box-shadow: 0 8px 32px #00d2ff55, 0 2px 8px rgba(0,0,0,0.13);
+    }
+    .dropdown:hover .dev-img-wrap,
+    .dropdown:focus-within .dev-img-wrap {
+      opacity: 1;
+      pointer-events: auto;
+      animation: devimg-pop 0.44s cubic-bezier(.4,1.4,.6,1) both;
+    }
+    @keyframes devimg-pop {
+      0% { opacity: 0; transform: scale(0.85); }
+      60% { opacity: 1; transform: scale(1.12); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+<header>
+</header>
+<div class="banner">
+  <div class="banner-text">Park View City Islamabad - Urban Living Redefined</div>
+</div>
+<div class="nav-buttons">
+  <div class="dropdown">
+    <div class="dropdown-btn">About Park View City</div>
+    <div class="dropdown-content">
+      <h3>Park View City Islamabad</h3>
+      <p>
+        Park View City is a CDA-approved, beautiful residential project located in the heart of Islamabad.
+        Surrounded by the lush green hills of Bani Gala, it offers a peaceful, family-friendly environment
+        with modern infrastructure, commercial zones, and all basic facilities.
+        It is developed by Vision Group and is considered one of the top housing societies in the capital.
+      </p>
+    </div>
+  </div>
+  <div class="dropdown">
+    <div class="dropdown-btn">About IGEO</div>
+    <div class="dropdown-content">
+      <h3>Institute of Geo-Informatics & Earth Observation</h3>
+      <p>
+        The Institute of Geo-Informatics & Earth Observation (IGEO) is a hub for advanced geospatial research and education.
+        It offers MS and PhD programs focused on GIS, Remote Sensing, and Earth Observation with applications in urban planning,
+        disaster management, and environmental monitoring.
+      </p>
+    </div>
+  </div>
+  <div class="dropdown">
+    <div class="dropdown-btn">About Developers</div>
+    <div class="dropdown-content">
+      <div class="devs-flex">
+        <div class="dev-block">
+          <div class="dev-img-wrap"><img src="Image/jaffar.PNG" alt="Jaffar Waqas" class="dev-img" /></div>
+          <div>
+            <h3>Jaffar Waqas</h3>
+            <p>
+              Jaffar Waqas is an MS scholar specializing in WebGIS and 3D urban visualization.<br>
+              He contributed extensively to this portal through interactive mapping and spatial data design.
+            </p>
+          </div>
+        </div>
+        <div class="dev-block">
+          <div class="dev-img-wrap"><img src="Image/abdulbasit.jpg" alt="Hafiz Abdul Basit Zaid" class="dev-img" /></div>
+          <div>
+            <h3>Hafiz Abdul Basit Zaid (Supervisor)</h3>
+            <p>
+              Mr. Hafiz Abdul Basit Zaid supervised the entire WebGIS project.<br>
+              His guidance in geospatial architecture, spatial databases, and web technologies played a key role in its success.
+            </p>
+          </div>
+        </div>
+      </div>
+      <h3>Mahrosh Babar Abbasi</h3>
+      <p>
+        Mahrosh is an MS scholar with expertise in geospatial applications and urban analysis.<br>
+        She worked on building user-friendly GIS tools for the platform.
+      </p>
+    </div>
+  </div>
+</div>
+<main>
+  <div class="section">
+    <h2>Location</h2>
+    <p>
+      Park View City Islamabad is situated in Malot, a rural area within Zone IV of the federal capital. It's located on Malot Road, near Bahria Enclave, and is accessible via roads like Malot Road, Kuri Dam Road, and Islamabad Highway. The project is also close to the Simly and Kuri Dam roads, a 5000-Kanal Botanical Garden, and Serena Hotel.
+    </p>
+  </div>
+  <div class="section center-section">
+    <a href="islamabad.html" class="btn">Park View City Islamabad</a>
+    <a href="lahore.html" class="btn">Park View City Lahore</a>
+  </div>
+  <div class="section">
+    <h2>About This Website</h2>
+    <p>
+      This interactive WebGIS platform was developed by <strong>Jaffar Waqas</strong> and <strong>Mahrosh Babar Abbasi</strong>,
+      MS Scholars at the <strong>Institute of Geo-Informatics & Earth Observation</strong>.
+      The project was supervised by <strong>Mr. Hafiz Abdul Basit Zaid</strong> and serves as a tool for urban planning,
+      visualization, and spatial analysis for Park View City.
+    </p>
+  </div>
+</main>
+<section class="gallery-section">
+  <div class="gallery-title">Gallery: Urban Life at Park View City</div>
+  <div class="gallery-slider">
+    <button class="slider-arrow slider-arrow-left" id="galleryPrev" aria-label="Previous">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 8L12 16L20 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+    <div class="gallery-multi" id="galleryMulti">
+      <!-- Images will be injected by JS -->
+    </div>
+    <button class="slider-arrow slider-arrow-right" id="galleryNext" aria-label="Next">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 8L20 16L12 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+  </div>
+</section>
+<footer>
+  Developed by <img src="Image/Wolf developer Logo.png" alt="Developer Logo" style="height:32px;vertical-align:middle;margin-left:8px;">
+</footer>
+<script>
+  // Multi-image gallery slider logic
+  const galleryImages = [
+    'Image/image1.jpg',
+    'Image/image2.jpg',
+    'Image/image3.jpg',
+    'Image/image4.jpg',
+    'Image/image5.jpg',
+    'Image/image6.jpg'
+  ];
+  let galleryIndex = 0;
+  const galleryMulti = document.getElementById('galleryMulti');
+  function renderGalleryImages() {
+    galleryMulti.innerHTML = '';
+    for (let i = 0; i < 3; i++) {
+      const imgIdx = (galleryIndex + i) % galleryImages.length;
+      const img = document.createElement('img');
+      img.src = galleryImages[imgIdx];
+      img.className = 'gallery-img';
+      img.alt = 'Park View City Gallery ' + (imgIdx + 1);
+      galleryMulti.appendChild(img);
+    }
+  }
+  document.getElementById('galleryPrev').onclick = function() {
+    galleryIndex = (galleryIndex - 1 + galleryImages.length) % galleryImages.length;
+    renderGalleryImages();
+    resetGalleryInterval();
+  };
+  document.getElementById('galleryNext').onclick = function() {
+    galleryIndex = (galleryIndex + 1) % galleryImages.length;
+    renderGalleryImages();
+    resetGalleryInterval();
+  };
+  function autoSlideGallery() {
+    galleryIndex = (galleryIndex + 1) % galleryImages.length;
+    renderGalleryImages();
+  }
+  let galleryInterval = setInterval(autoSlideGallery, 3000);
+  function resetGalleryInterval() {
+    clearInterval(galleryInterval);
+    galleryInterval = setInterval(autoSlideGallery, 3000);
+  }
+  renderGalleryImages();
+</script>
+</body>
+</html>
